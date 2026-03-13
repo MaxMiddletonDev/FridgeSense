@@ -1,4 +1,5 @@
 const inputForm = document.getElementById("inputForm")
+const content = document.getElementById("content");
 const ingredients = [];
 
 inputForm.addEventListener("submit", function(e) {
@@ -8,7 +9,6 @@ inputForm.addEventListener("submit", function(e) {
 
 async function inputData() {
     const ingredient = document.getElementById("input").value.trim();
-    const content = document.getElementById("content");
 
     try {
         if(ingredients.includes(ingredient)) {
@@ -20,9 +20,22 @@ async function inputData() {
         }
         ingredients.push(ingredient)
         console.log(ingredients)
-        content.innerHTML = ingredients.map(item => `<span class="tag">${item}</span>`).join('');
+        refreshIngredient();
 
     } catch (error) {
         content.innerHTML = "";
     }
+}
+
+async function removeIngredient(index) {
+    ingredients.splice(index, 1);
+    refreshIngredient();
+}
+
+async function refreshIngredient() {
+    content.innerHTML = ingredients.map((item, index) => `
+        <span class="tag">
+            ${item} <button class="delete-btn" onclick="removeIngredient(${index})">&times;</button>
+        </span>
+    `).join('');
 }
