@@ -11,6 +11,11 @@ async function inputData() {
     const content = document.getElementById("content");
 
     try {
+        if(ingredients.includes(ingredient)) {
+            console.log("Duplicate Detected")
+            return
+        }
+        
         ingredients.push(ingredient)
         console.log(ingredients)
         content.innerHTML = `
