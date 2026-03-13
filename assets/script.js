@@ -15,7 +15,9 @@ async function inputData() {
             console.log("Duplicate Detected")
             return
         }
-
+        if(!ingredient) {
+            return
+        }
         ingredients.push(ingredient)
         console.log(ingredients)
         content.innerHTML = ingredients.map(item => `<span class="tag">${item}</span>`).join('');
