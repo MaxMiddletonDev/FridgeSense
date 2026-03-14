@@ -1,6 +1,6 @@
 const inputForm = document.getElementById("inputForm")
 const content = document.getElementById("content");
-const ingredients = JSON.parse(localStorage.getItem("fridgeIngredients")) || [];
+export const ingredients = JSON.parse(localStorage.getItem("fridgeIngredients")) || [];
 
 refreshIngredient();
 
@@ -31,6 +31,7 @@ async function inputData() {
         content.innerHTML = "";
     }
 }
+window.removeIngredient = removeIngredient;
 
 async function removeIngredient(index) {
     ingredients.splice(index, 1);
