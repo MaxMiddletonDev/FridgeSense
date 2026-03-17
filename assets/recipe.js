@@ -15,6 +15,14 @@ async function fetchData () {
         const response = await fetch(url)
         const data = await response.json();
         console.log(data)
+
+        recipes.innerHTML = data.map(recipe => `
+            <div class="recipe-card">
+            <h3>${recipe.title}</h3>
+            <img src="${recipe.image}" alt="${recipe.title}">
+            </div>
+        `).join('');
+
     } catch(error) {
         console.error(error);
     }
