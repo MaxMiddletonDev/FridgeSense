@@ -2,6 +2,8 @@ const inputForm = document.getElementById("inputForm")
 const content = document.getElementById("content");
 export const ingredients = JSON.parse(localStorage.getItem("fridgeIngredients")) || [];
 
+import { fetchData } from './recipe.js';
+
 refreshIngredient();
 
 inputForm.addEventListener("submit", function(e) {
@@ -37,6 +39,7 @@ async function removeIngredient(index) {
     ingredients.splice(index, 1);
     save();
     refreshIngredient();
+    fetchData();
 }
 
 async function refreshIngredient() {
