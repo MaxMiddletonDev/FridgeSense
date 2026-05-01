@@ -16,10 +16,20 @@ export async function fetchData () {
         const data = await response.json();
         console.log(data)
 
-        recipes.innerHTML = data.map(recipe => `
+        const detailedRecipes = await Promise.all(
+            data.map(async (recipe) => {
+                const detailUrl = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${token.API_TOKEN}`;
+                const detailResponse = await fetch(detailUrl);
+                return await detailResponse.json();
+            })
+        );
+
+        recipes.innerHTML = detailedRecipes.map(recipe => `
             <div class="recipe-card">
             <h3>${recipe.title}</h3>
             <img src="${recipe.image}" alt="${recipe.title}">
+            <br>
+            <a href="${recipe.sourceUrl}" target="_blank" class="recipe-link">VIEW FULL RECIPE</a>
             </div>
         `).join('');
 
