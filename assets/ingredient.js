@@ -39,7 +39,6 @@ async function removeIngredient(index) {
     ingredients.splice(index, 1);
     save();
     refreshIngredient();
-    fetchData();
 }
 
 async function refreshIngredient() {

@@ -22,27 +22,20 @@ export async function fetchData () {
             }
         }
 
-        const data = await response.json();
+        const recipeIds = basicRecipes.map(recipe => recipe.id).join(',');
 
-        const detailedRecipes = await Promise.all(
-            data.map(async (recipe) => {
-                const detailUrl = `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${token.API_TOKEN}`;
-                const detailResponse = await fetch(detailUrl);
-                const details = await detailResponse.json();
+        const bulkUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipeIds}&apiKey=${token.API_TOKEN}`;
+        const bulkResponse = await fetch(bulkUrl);
+        if (!bulkResponse.ok) throw new Error("Bulk Information API failed");
+        const detailedRecipes = await bulkResponse.json();
 
-                return { 
-                    ...details, 
-                    missedIngredients: recipe.missedIngredients 
-                };
-            })
-        );
+        recipes.innerHTML = detailedRecipes.map((recipe, index) => {
+            const matchingBasicRecipe = basicRecipes.find(b => b.id === recipe.id);
+            const missed = matchingBasicRecipe ? matchingBasicRecipe.missedIngredients : [];
 
-        recipes.innerHTML = detailedRecipes.map(recipe => {
-            const missingItems = recipe.missedIngredients.map(item => 
-                `<li>${item.name}</li>`
-            ).join('');
-
-            const missingSection = recipe.missedIngredients.length > 0 
+            const missingItems = missed.map(item => `<li>${item.name}</li>`).join('');
+            
+            const missingSection = missed.length > 0 
                 ? `<div class="missing-ingredients"><strong>Still need to buy:</strong><ul>${missingItems}</ul></div>`
                 : `<div class="missing-ingredients" style="color: green;"><strong>You have all the ingredients!</strong></div>`;
 
@@ -52,11 +45,12 @@ export async function fetchData () {
                     <img src="${recipe.image}" alt="${recipe.title}">
                     ${missingSection}
                     <br>
-                    <a href="${recipe.sourceUrl}" target="_blank" class="recipe-link">View Full Recipe &rarr;</a>
+                    <a href="${recipe.sourceUrl}" target="_blank" class="recipe-link">View Full Recipe</a>
                 </div>
             `;
         }).join('');
+
     } catch(error) {
-        console.error(error);
+        console.error("Error fetching recipes:", error);
     }
 }
