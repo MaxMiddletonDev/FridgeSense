@@ -9,10 +9,19 @@ generateBtn.addEventListener("click", function(e) {
 export async function fetchData () {
     const recipes = document.getElementById("recipes");
     const ingredientList = ingredients.join(',');
-    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientList}&number=2&apiKey=${token.API_TOKEN}`;
+    const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientList}&number=6&apiKey=${token.API_TOKEN}`;
 
     try {
         const response = await fetch(url)
+
+        if (!response.ok) {
+            if (response.status === 402) {
+                throw new Error("API daily limit reached. Please try again tomorrow.");
+            } else {
+                throw new Error(`API returned status: ${response.status}`);
+            }
+        }
+
         const data = await response.json();
 
         const detailedRecipes = await Promise.all(
