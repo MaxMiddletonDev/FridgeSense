@@ -22,6 +22,8 @@ export async function fetchData () {
             }
         }
 
+        const basicRecipes = await response.json();
+
         const recipeIds = basicRecipes.map(recipe => recipe.id).join(',');
 
         const bulkUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipeIds}&apiKey=${token.API_TOKEN}`;
