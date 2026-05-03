@@ -105,6 +105,7 @@ button:active {
 
 .delete-btn:hover {
     color: #5f5f5f;
+    background-color: transparent;
 }
 
 #content {
