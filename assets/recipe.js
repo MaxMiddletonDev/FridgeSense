@@ -1,6 +1,8 @@
 import { ingredients } from './ingredient.js'
 const generateBtn = document.getElementById("generate")
 
+let lastSearchedIngredients = "";
+
 generateBtn.addEventListener("click", function(e) {
     e.preventDefault();
     fetchData();
@@ -10,6 +12,14 @@ export async function fetchData () {
     const recipes = document.getElementById("recipes");
     const ingredientList = ingredients.join(',');
     const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientList}&number=6&apiKey=${token.API_TOKEN}`;
+
+    if (ingredients.length === 0) {
+        return;
+    }
+
+    if (ingredientList === lastSearchedIngredients) {
+        return; 
+    }
 
     try {
         const response = await fetch(url)
@@ -40,6 +50,8 @@ export async function fetchData () {
             const missingSection = missed.length > 0 
                 ? `<div class="missing-ingredients"><strong>Still need to buy:</strong><ul>${missingItems}</ul></div>`
                 : `<div class="missing-ingredients" style="color: green;"><strong>You have all the ingredients!</strong></div>`;
+
+            lastSearchedIngredients = ingredientList;
 
             return `
                 <div class="recipe-card">
