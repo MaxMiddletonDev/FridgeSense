@@ -1,5 +1,6 @@
 const inputForm = document.getElementById("inputForm")
 const content = document.getElementById("content");
+const clearButton = document.getElementById("clearAll");
 export const ingredients = JSON.parse(localStorage.getItem("fridgeIngredients")) || [];
 
 import { fetchData } from './recipe.js';
@@ -9,6 +10,11 @@ refreshIngredient();
 inputForm.addEventListener("submit", function(e) {
     e.preventDefault();
     inputData();
+});
+
+clearButton.addEventListener("click", function(e) {
+    e.preventDefault();
+    clearData();
 });
 
 async function inputData() {
@@ -51,4 +57,23 @@ async function refreshIngredient() {
 
 async function save() {
     localStorage.setItem("fridgeIngredients", JSON.stringify(ingredients));
+}
+
+async function clearData() {
+    const recipesContainer = document.getElementById("recipes");
+    if (recipesContainer) {
+        recipesContainer.innerHTML = "";
+    }
+
+    const contentContainer = document.getElementById("content");
+    if (contentContainer) {
+        contentContainer.innerHTML = "";
+    }
+
+    const inputField = document.getElementById("input");
+    if (inputField) {
+        inputField.value = "";
+    }
+
+    ingredients.length = 0;
 }

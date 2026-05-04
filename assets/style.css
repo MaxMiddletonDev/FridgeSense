@@ -72,6 +72,12 @@ button:active {
     transform: scale(0.98);
 }
 
+#recipeGenerationButtons {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 400px;
+}
+
 #generate {
     background-color: #2e7d32; 
     width: 100%;
@@ -80,6 +86,16 @@ button:active {
 
 #generate:hover {
     background-color: #1b5e20;
+}
+
+#clearAll {
+    background-color: #dd1414; 
+    width: 100%;
+    max-width: 300px;
+}
+
+#clearAll:hover {
+    background-color: #c51111;
 }
 
 .tag {
