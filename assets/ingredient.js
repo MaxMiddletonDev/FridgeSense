@@ -50,7 +50,7 @@ async function removeIngredient(index) {
 async function refreshIngredient() {
     content.innerHTML = ingredients.map((item, index) => `
         <span class="tag">
-            ${item} <button class="delete-btn" onclick="removeIngredient(${index})">&times;</button>
+            ${item} <button class="deleteButton" onclick="removeIngredient(${index})">&times;</button>
         </span>
     `).join('');
 }

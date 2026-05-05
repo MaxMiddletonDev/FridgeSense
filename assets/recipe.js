@@ -1,9 +1,11 @@
 import { ingredients } from './ingredient.js'
-const generateBtn = document.getElementById("generate")
+const generateButton = document.getElementById("generate")
 
 let lastSearchedIngredients = "";
 
-generateBtn.addEventListener("click", function(e) {
+export let lastFetchedBasicRecipes = []; 
+
+generateButton.addEventListener("click", function(e) {
     e.preventDefault();
     fetchData();
 });
@@ -34,6 +36,8 @@ export async function fetchData () {
 
         const basicRecipes = await response.json();
 
+        lastFetchedBasicRecipes = basicRecipes;
+
         const recipeIds = basicRecipes.map(recipe => recipe.id).join(',');
 
         const bulkUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipeIds}&apiKey=${token.API_TOKEN}`;
@@ -51,6 +55,10 @@ export async function fetchData () {
                 ? `<div class="missing-ingredients"><strong>Still need to buy:</strong><ul>${missingItems}</ul></div>`
                 : `<div class="missing-ingredients" style="color: green;"><strong>You have all the ingredients!</strong></div>`;
 
+            const addToListButton = missed.length > 0
+                ? `<button class="addToListButton" id="addButton-${recipe.id}" onclick="addMissingToList(${recipe.id})">+ Add to Shopping List</button>`
+                : ``;
+
             lastSearchedIngredients = ingredientList;
 
             return `
@@ -60,6 +68,7 @@ export async function fetchData () {
                     ${missingSection}
                     <br>
                     <a href="${recipe.sourceUrl}" target="_blank" class="recipe-link">View Full Recipe</a>
+                    ${addToListButton}
                 </div>
             `;
         }).join('');
